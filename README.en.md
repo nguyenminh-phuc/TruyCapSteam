@@ -1,5 +1,5 @@
 # TruyCapSteam - An app to bypass firewalls
----
+
 :earth_asia: <sub><sup>[Tiếng Việt :vietnam:](README.md) | [**English :us:**](README.en.md)</sup></sub>
 
 ![Example](docs/example.png)

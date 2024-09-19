@@ -23,7 +23,7 @@ To test if the app works, run it as an administrator and try to visit https://st
     {TxtAppStopping, "TruyCapSteam is stopping..."},
     {TxtServiceInstalled,
      "TruyCapSteam is now installed as a Windows service."},
-    {TxtRestartNeeded, " Service WinDivert has already been marked for "
+    {TxtRestartNeeded, "Service WinDivert has already been marked for "
                        "deletion. Please restart your PC to finish."},
     {TxtPort, "HTTPS port"},
     {TxtPorts, "HTTPS ports"},
