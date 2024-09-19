@@ -1,0 +1,49 @@
+name: Build TruyCapSteam
+
+on:
+#  push:
+#    paths:
+#      - include/**
+#      - src/**
+  workflow_dispatch:
+
+env:
+  ARCH: x64
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get short SHA # https://stackoverflow.com/a/74033027
+        run: echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
+
+      - name: Create env vars
+        run: |
+          echo "BUILD=build-${{ env.SHORT_SHA }}" >> $env:GITHUB_ENV
+          echo "ARTIFACT=artifact-${{ env.SHORT_SHA }}" >> $env:GITHUB_ENV
+
+      - name: Build
+        uses: threeal/cmake-action@v2
+        with:
+          build-dir: ${{ env.BUILD }}
+          build-args: --config ${{ env.BUILD_TYPE }}
+          options: |
+            CMAKE_GENERATOR_PLATFORM=${{ env.ARCH }}
+            CMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+
+      - name: Prepare artifact
+        run: |
+          New-Item -ItemType Directory -Path ${{ env.ARTIFACT }}
+          Copy-Item -Path ${{ env.BUILD }}\${{ env.BUILD_TYPE }}\*.exe -Destination ${{ env.ARTIFACT }}
+          Copy-Item -Path ${{ env.BUILD }}\${{ env.BUILD_TYPE }}\*.dll -Destination ${{ env.ARTIFACT }}
+          Copy-Item -Path ${{ env.BUILD }}\${{ env.BUILD_TYPE }}\*.sys -Destination ${{ env.ARTIFACT }}
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: TruyCapSteam-${{ env.SHORT_SHA }}
+          path: ${{ env.ARTIFACT }}
