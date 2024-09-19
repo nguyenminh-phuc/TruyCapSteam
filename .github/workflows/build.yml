@@ -1,10 +1,10 @@
 name: Build TruyCapSteam
 
 on:
-#  push:
-#    paths:
-#      - include/**
-#      - src/**
+  push:
+    paths:
+      - include/**
+      - src/**
   workflow_dispatch:
 
 env:
