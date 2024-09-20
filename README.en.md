@@ -4,11 +4,11 @@
 
 ![Example](docs/example.png)
 
-**TruyCapSteam** is an application that can help you access certain websites like [Steam](https://store.steampowered.com/) and [BBC](https://www.bbc.co.uk/), which are blocked by some Internet Service Providers (ISPs) in Vietnam.
+**TruyCapSteam** is an application that can help you access certain websites like [Steam](https://store.steampowered.com/) and [BBC](https://www.bbc.co.uk/), which are blocked by some Internet Service Providers (ISPs) in Vietnam. *([Confirmed](https://www.reddit.com/r/VietNam/comments/1fkgnbi/truycapsteam_simple_app_to_get_around_isp_blocks/lnvp28p/) to work on FPT and Vinaphone networks)*
 
 ## How to Use
 
-1. **Configure DNS over HTTPS (DoH)**: Before using the app, you need to set up DoH to ensure that domain names are resolved without being blocked. Check out the [detailed setup guide](#configure-dns-over-https-doh) below.
+1. **Configure DNS over HTTPS (DoH)**: Before using the app, you need to set up DoH to ensure that domain names are resolved without being blocked. Check out the [detailed setup guide](#configure-dns-over-https-doh) below. *Note:* the Steam app might use DNSv6 to resolve domain names, so you also need to configure DNSv6 in your Windows settings.
 2. **Download the app**: Download TruyCapSteam from the [**Release page**](https://github.com/nguyenminh-phuc/TruyCapSteam/releases), then extract the files to a directory.
 3. **Run the app**: Start the application with **Admin** rights, then try accessing https://store.steampowered.com/ to test if the connection works.
 
@@ -30,11 +30,13 @@ OPTIONS:
 ```
 
 ### Configure DNS over HTTPS (DoH)
-
 To avoid domain name blocks, follow these steps to set up DoH:
-1. Google Chrome: Settings → Privacy and security → Security → Use secure DNS → Select DNS provider: Cloudflare (1.1.1.1)
-2. Microsoft Edge: Settings → Privacy, search, and services → Security → Use secure DNS to specify how to lookup the network address for websites → Choose a service provider: Cloudflare (1.1.1.1)
-3. Mozilla Firefox: Settings → Privacy & Security → DNS over HTTPS → Enable DNS over HTTPS using: Max Protection → Choose provider: Cloudflare
+1. Windows: Settings → Network & internet → Ethernet/Wi-Fi → DNS server assignment: Manual
+- IPv4: Preferred DNS: `1.1.1.1`, Alternate DNS: `1.0.0.1`, DNS over HTTPS: On (automatic template)
+- IPv6: Preferred DNS: `2606:4700:4700::1111`, Alternate DNS: `2606:4700:4700::1001`, DNS over HTTPS: On (automatic template)
+2. Google Chrome: Settings → Privacy and security → Security → Use secure DNS → Select DNS provider: `Cloudflare (1.1.1.1)`
+3. Microsoft Edge: Settings → Privacy, search, and services → Security → Use secure DNS to specify how to lookup the network address for websites → Choose a service provider: `Cloudflare (1.1.1.1)`
+4. Mozilla Firefox: Settings → Privacy & Security → DNS over HTTPS → Enable DNS over HTTPS using: Max Protection → Choose provider: `Cloudflare`
 
 ### Installing TruyCapSteam as a Windows Service
 - To install TruyCapSteam as a Windows service, use the `--install` option.
@@ -48,7 +50,7 @@ When you visit the Steam website, your browser sends a **TLS ClientHello** packe
 ![DPI](docs/dpi.png)
 
 ### The Solution
-Most firewalls operate in a "passive" mode to optimize performance. By fragmenting the **ClientHello** packet, the DPI system cannot fully read the SNI information, and therefore the connection is not blocked. This allows you to access the website normally.
+Most firewalls operate in a "passive" mode to optimize performance. By fragmenting the **ClientHello** packet, the DPI system cannot fully read the packet information, and therefore the connection is not blocked. This allows you to access the website normally.
 
 ### How TruyCapSteam Bypasses DPI
 During the **TCP handshake**, after the server sends a **SYN+ACK** packet, TruyCapSteam intercepts and modifies the **TCP window** size to a smaller value. This causes the **ClientHello** packet to be fragmented when sent, making it harder for the ISP’s DPI system to read and block, thereby allowing the connection to succeed.
